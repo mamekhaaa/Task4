@@ -1,0 +1,61 @@
+using System;
+
+namespace ExamQuality
+{
+    class Exam
+    {
+        public string Discipline { get; set; }
+        public int NumberOfStudents { get; set; }
+        public double Duration { get; set; }
+
+        public Exam(string discipline, int numberOfStudents, double duration)
+        {
+            Discipline = discipline;
+            NumberOfStudents = numberOfStudents;
+            Duration = duration;
+        }
+
+        public virtual double CalculateQuality()
+        {
+            return NumberOfStudents / Duration;
+        }
+
+        public void DisplayInfo()
+        {
+            Console.WriteLine($"Дисциплина: {Discipline}");
+            Console.WriteLine($"Число студентов на экзамене: {NumberOfStudents}");
+            Console.WriteLine($"Продолжительность экзамена (ч): {Duration}");
+            Console.WriteLine($"Качество экзамена: {CalculateQuality()}");
+        }
+    }
+
+    class ImprovedExam : Exam
+    {
+        public double FailedPercentage { get; set; }
+
+        public ImprovedExam(string discipline, int numberOfStudents, double duration, double failedPercentage)
+            : base(discipline, numberOfStudents, duration)
+        {
+            FailedPercentage = failedPercentage;
+        }
+
+        public override double CalculateQuality()
+        {
+            double baseQuality = base.CalculateQuality();
+            return baseQuality * (100 - FailedPercentage) / 100;
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Exam exam = new Exam("Математика", 25, 2.5);
+            exam.DisplayInfo();
+            Console.WriteLine();
+
+            ImprovedExam improvedExam = new ImprovedExam("Физика", 30, 3, 20);
+            improvedExam.DisplayInfo();
+        }
+    }
+}
